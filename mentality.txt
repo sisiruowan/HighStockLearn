@@ -1,0 +1,10 @@
+1 Model：TempLog：温度日志
+		FloatField 		temp：温度
+		DateTimeField 	recv_time：收到的时间
+
+2 View：index：显示图表
+		input：模拟输入数据的页面
+		
+
+3 信号流向：
+	1 单片机读取温度
