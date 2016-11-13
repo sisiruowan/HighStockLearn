@@ -13,9 +13,9 @@ from . import views
 app_name = 'charts'
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
-	url(r'^/input/$', views.input, name = 'input'),
-	url(r'^/result/$', views.result, name = 'result'),
-	url(r'^/addDate/$', views.addDate, name = 'addDate'),
-	
+	url(r'^input/$', views.input, name = 'input'),
+	url(r'^result/$', views.result, name = 'result'),
+	url(r'^addDate/$', views.addDate, name = 'addDate'),
+
 ]
 

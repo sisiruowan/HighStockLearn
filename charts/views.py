@@ -10,7 +10,7 @@ from .models import TempLog
 show_date_num = 100
 #首页
 def index(request):
-	return HttpResponse(u'这是主页！！')
+	return render(request, 'charts/index.html')
 #输入数据页
 def input(request):
 	return render(request, 'charts/input.html')
