@@ -14,8 +14,8 @@
     	<p><strong>{{ error_message }}</strong></p>
     {% endif %}
 
-    <form action="{% url 'charts:addDate' %}", method="post">
-    {% csrf_token %}
+    <form action="{% url 'charts:addData' %}", method="post">
+    <!-- {% csrf_token %} -->
     <label>输入温度</label>
     <input type="text" name="temp"><br />
     <input type="submit" value="提交">

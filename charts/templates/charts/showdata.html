@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>温度监控</title>
+		{% load static %}
+		<script src="{% static 'charts/jquery/jquery-3.1.1.js' %}"></script>
+		<script src="{% static 'charts/highstock/highstock.js' %}"></script>
+		<script src="{% static 'charts/highstock/modules/exporting.js' %}"></script>
+		<script type="text/javascript">
+			'use strict';
+			//得到初始数据
+			var temp_datas = {{ temp_datas|safe }};
+			alert(temp_datas[0]);
+			var latest_time = temp_datas[temp_datas.length-1][0]
+			alert('latest_time:'+latest_time)
+			//查询得到更新数据
+			function getNewTemp(series){
+				var if_receive = false;
+				var new_data = [];
+				var post_data = {
+					'latest_time':latest_time,
+				};
+				$.ajax({
+					url: "{% url 'charts:sendUpdateData' %}",
+					type: 'POST',
+					data: post_data,
+					// dataType: "json",
+					success: function (data){
+						new_data = JSON.parse(data);
+						$('#message1').html(data);
+						$('#message2').html(new_data[0][1]+1);
+						if_receive = true;
+						
+						var i;
+						for (i = 0;i<new_data.length;i++){
+							series.addPoint(new_data[i],true,true);
+							$('#message3').html(new_data[i])
+						}
+						this.latest_time = new_data[new_data.length-1][0];
+
+					},
+					// alawys: function(){
+					// 	return new_data;
+					// }
+				});
+				// while(!if_receive){
+				// 	;
+				// }
+			}
+            $(function () {
+			    Highcharts.setOptions({
+			        global : {
+			            useUTC : false
+			        }
+			    });
+			    // Create the chart
+			    $('#container').highcharts('StockChart', {
+			        chart : {
+			            events : {
+			                load : function () {
+			                    // set up the updating of the chart each second
+			                    var series = this.series[0];
+			                    setInterval(function () {
+			                        var if_receive = false;
+									var new_data = [];
+									var post_data = {
+										'latest_time':latest_time,
+									};
+									$.ajax({
+										url: "{% url 'charts:sendUpdateData' %}",
+										type: 'POST',
+										data: post_data,
+										// dataType: "json",
+										success: function (data){
+											new_data = JSON.parse(data);
+											$('#message1').html(latest_time);
+											$('#message2').html(new_data[0][1]);
+											if_receive = true;
+											
+											var i;
+											for (i = 0;i<new_data.length;i++){
+												series.addPoint(new_data[i],true,true);
+												$('#message3').html(new_data[i])
+											}
+											latest_time = new_data[new_data.length-1][0];
+
+										},
+									});
+			                    }, 1000);
+			                }
+			            }
+			        },
+			        rangeSelector: {
+			            buttons: [{
+			                count: 1,
+			                type: 'minute',
+			                text: '1M'
+			            }, {
+			                count: 5,
+			                type: 'minute',
+			                text: '5M'
+			            }, {
+			                type: 'all',
+			                text: 'All'
+			            }],
+			            inputEnabled: false,
+			            selected: 0
+			        },
+			        title : {
+			            text : 'Live random data'
+			        },
+			        exporting: {
+			            enabled: false
+			        },
+			        series : [{
+			            name : 'Random data',
+			            data : temp_datas
+			        }]
+			    });
+			});
+		</script>
+	</head>
+	<body>
+		<p id="message1">No message1</p>
+		<p id="message2">No message2</p>
+		<div id="container" style="height: 400px; min-width: 310px"></div>
+		<p id="message3">No message3</p>
+	</body>
+</html>

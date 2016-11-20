@@ -15,7 +15,10 @@ urlpatterns = [
 	url(r'^$', views.index, name='index'),
 	url(r'^input/$', views.input, name = 'input'),
 	url(r'^result/$', views.result, name = 'result'),
-	url(r'^addDate/$', views.addDate, name = 'addDate'),
+	url(r'^addData/$', views.addData, name = 'addData'),
+	url(r'^addWifiData/$', views.addWifiData, name = 'addWifiData'),
+	url(r'^showData/$',views.showData, name = 'showData'),
+	url(r'^sendUpdateData/$',views.sendUpdateData, name = 'sendUpdateData'),
 
 ]
 
